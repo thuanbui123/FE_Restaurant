@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '~/utils/AuthUtil/Auth';
 
 function Login() {
-    const [user, setUser] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const auth = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
@@ -18,7 +19,7 @@ function Login() {
     }, [auth.user, navigate]);
 
     const handleLogin = () => {
-        auth.login(user);
+        auth.login(username, password);
         // Điều hướng người dùng tới trang trước đó
         navigate(redirectPath);
     };
@@ -30,7 +31,16 @@ function Login() {
                 <input
                     type="text"
                     onChange={(e) => {
-                        setUser(e.target.value);
+                        setUsername(e.target.value);
+                    }}
+                />
+            </label>
+            <label>
+                Password:{' '}
+                <input
+                    type="password"
+                    onChange={(e) => {
+                        setPassword(e.target.value);
                     }}
                 />
             </label>

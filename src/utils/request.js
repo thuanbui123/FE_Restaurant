@@ -4,8 +4,33 @@ const httpRequest = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
 });
 
+httpRequest.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        if (error.response) {
+            if (error.response.status === 401) {
+                alert('Lỗi 401: Unauthorized. Bạn cần đăng nhập lại.');
+            } else if (error.response.status === 403) {
+                alert('Lỗi 403: Forbidden. Bạn không có quyền truy cập.');
+            }
+        }
+        return Promise.reject(error);
+    },
+);
+
 export const request = async (method, path, data = null, options = {}) => {
     try {
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            options.headers = {
+                ...options.headers,
+                Authorization: `Bearer ${token}`,
+            };
+        }
+
         let response;
 
         switch (method.toLowerCase()) {
