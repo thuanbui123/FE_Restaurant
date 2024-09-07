@@ -1,31 +1,26 @@
-import { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '~/utils/AuthUtil/Auth';
+import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from '~/pages/LoginAndRegister/styles.module.scss';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '~/utils/AuthUtil/Auth';
 
 const cx = classNames.bind(styles);
 
-function Login() {
+function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+
     const auth = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
     const redirectPath = location.state?.path || '/';
 
-    useEffect(() => {
-        if (auth.user) {
-            // Nếu người dùng đã đăng nhập, điều hướng tới trang home
-            navigate('/');
-        }
-    }, [auth.user, navigate]);
-
-    const handleLoginSubmit = (e) => {
+    const handleRegisterSubmit = (e) => {
         e.preventDefault();
-        auth.login(username, password);
+        auth.register(email, username, password);
         // Điều hướng người dùng tới trang trước đó
         navigate(redirectPath);
     };
@@ -35,9 +30,18 @@ function Login() {
     };
 
     return (
-        <div className={cx('form-container', 'login-container')}>
-            <form onSubmit={handleLoginSubmit}>
-                <h1>Login here</h1>
+        <div className={cx('form-container', 'register-container')}>
+            <form onSubmit={handleRegisterSubmit}>
+                <h1>Register here</h1>
+                <input
+                    type="email"
+                    placeholder="Email"
+                    name="email"
+                    value={email}
+                    onChange={(e) => {
+                        setEmail(e.target.value);
+                    }}
+                />
                 <input
                     type="text"
                     placeholder="Username"
@@ -74,7 +78,7 @@ function Login() {
                     </div>
                     */}
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit">Register</button>
                 <span>or use your account</span>
                 <div className={cx('social-container')}>
                     <Link to="#" className={cx('social')}>
@@ -92,4 +96,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default Register;

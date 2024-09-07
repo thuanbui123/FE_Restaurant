@@ -7,7 +7,11 @@ export const AuthProvider = ({ children }) => {
     const initialUser = () => {
         try {
             const user = localStorage.getItem('user');
-            return user ? JSON.parse(user) : null;
+            // Kiểm tra nếu user không phải là chuỗi JSON hợp lệ
+            if (user && user !== 'undefined') {
+                return user;
+            }
+            return null;
         } catch (error) {
             console.error('Error parsing user from localStorage:', error);
             return null;
@@ -23,9 +27,11 @@ export const AuthProvider = ({ children }) => {
         const res = await request('post', '/auth/authenticate', postData);
         let data = res.data;
         localStorage.setItem('token', data.token);
-        localStorage.setItem('user', data.username);
+        localStorage.setItem('user', JSON.stringify(data.username));
         setUser(data.username);
     };
+
+    const register = async (email, username, password) => {};
 
     const logout = () => {
         setUser(null);

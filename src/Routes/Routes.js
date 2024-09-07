@@ -2,12 +2,12 @@ import Home from '~/pages/Home';
 import Detail from '~/pages/Detail';
 import Admin from '~/pages/Admin';
 import AdminLayout from '~/Layouts/AdminLayout';
-import Login from '~/pages/Login';
 import Products from '~/pages/Product/Products';
 import React from 'react';
 import Spinner from '~/components/Spinner';
 import NoMatch from '~/components/NoMatch';
 import NewProducts from '~/pages/NewProducts';
+import LoginRegisterForm from '~/pages/LoginAndRegister/LoginRegisterForm';
 
 // Nạp các component cần thực hiện lazyLoading
 const LazyNewProduct = React.lazy(() => import('~/pages/NewProducts'));
@@ -18,7 +18,7 @@ const LazyFeatureProduct = React.lazy(() => import('~/pages/FeaturedProducts'));
 const publicRoutes = [
     { path: '/', component: Home },
     { path: '/detail', component: Detail },
-    { path: '/login', component: Login },
+    { path: '/auth', component: LoginRegisterForm, layout: null },
 ];
 
 //Khi khai báo route nên viết trước route có path '*'
