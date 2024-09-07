@@ -10,6 +10,7 @@ function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState('');
     const auth = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
@@ -23,11 +24,17 @@ function Login() {
         }
     }, [auth.user, navigate]);
 
-    const handleLoginSubmit = (e) => {
-        e.preventDefault();
-        auth.login(username, password);
-        // Điều hướng người dùng tới trang trước đó
-        navigate(redirectPath);
+    const handleLoginSubmit = async (e) => {
+        await e.preventDefault();
+        // Xóa các error trước đó
+        setError('');
+        const errorMessage = await auth.login(username, password);
+
+        if (errorMessage) {
+            setError(errorMessage);
+        } else {
+            navigate(redirectPath);
+        }
     };
 
     const togglePasswordVisibility = () => {
@@ -38,6 +45,7 @@ function Login() {
         <div className={cx('form-container', 'login-container')}>
             <form onSubmit={handleLoginSubmit}>
                 <h1>Login here</h1>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
                 <input
                     type="text"
                     placeholder="Username"

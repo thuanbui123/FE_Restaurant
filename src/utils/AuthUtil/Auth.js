@@ -24,14 +24,43 @@ export const AuthProvider = ({ children }) => {
             username: username,
             password: password,
         };
-        const res = await request('post', '/auth/authenticate', postData);
-        let data = res.data;
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.username));
-        setUser(data.username);
+        try {
+            const res = await request('post', '/auth/authenticate', postData);
+            let data = res.data;
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.username));
+            setUser(data.username);
+        } catch (error) {
+            if (error.response) {
+                const backendMessage = error.response.data.message || 'An error occurred. Please try again.';
+                return backendMessage;
+            } else {
+                return 'Network error or server not reachable';
+            }
+        }
     };
 
-    const register = async (email, username, password) => {};
+    const register = async (email, username, password) => {
+        const postData = {
+            email: email,
+            username: username,
+            password: password,
+        };
+        try {
+            const res = await request('post', '/auth/register', postData);
+            let data = res.data;
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.username));
+            setUser(data.username);
+        } catch (error) {
+            if (error.response) {
+                const backendMessage = error.response.data.message || 'An error occurred. Please try again.';
+                return backendMessage;
+            } else {
+                return 'Network error or server not reachable';
+            }
+        }
+    };
 
     const logout = () => {
         setUser(null);
@@ -39,7 +68,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
     };
 
-    return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ user, login, register, logout }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

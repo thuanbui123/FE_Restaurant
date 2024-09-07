@@ -11,18 +11,23 @@ function Register() {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-
+    const [error, setError] = useState('');
     const auth = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
     const redirectPath = location.state?.path || '/';
 
-    const handleRegisterSubmit = (e) => {
+    const handleRegisterSubmit = async (e) => {
         e.preventDefault();
-        auth.register(email, username, password);
-        // Điều hướng người dùng tới trang trước đó
-        navigate(redirectPath);
+        // Xóa các error trước đó
+        setError('');
+        const errorMessage = await auth.register(email, username, password);
+        if (errorMessage) {
+            setError(errorMessage);
+        } else {
+            navigate(redirectPath);
+        }
     };
 
     const togglePasswordVisibility = () => {
@@ -33,6 +38,7 @@ function Register() {
         <div className={cx('form-container', 'register-container')}>
             <form onSubmit={handleRegisterSubmit}>
                 <h1>Register here</h1>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
                 <input
                     type="email"
                     placeholder="Email"
