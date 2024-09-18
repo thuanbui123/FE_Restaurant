@@ -1,5 +1,7 @@
+import EmployeeDataTable from '~/components/EmployeeDataTable';
+
 function Admin() {
-    return <h1>Admin page</h1>;
+    return <EmployeeDataTable />;
 }
 
 export default Admin;
