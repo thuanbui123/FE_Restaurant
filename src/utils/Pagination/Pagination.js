@@ -31,12 +31,18 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
     return (
         <div className={cx('center')}>
             <div className={cx('pagination')}>
-                <Link to="#" onClick={handlePreviousPage} className={currentPage === 0 ? disabled : ''}>
+                <Link
+                    to="#"
+                    style={{ borderRadius: '5px' }}
+                    onClick={handlePreviousPage}
+                    className={currentPage === 0 ? disabled : ''}
+                >
                     &laquo;
                 </Link>
                 {pages.map((page) => (
                     <Link
                         to="#"
+                        style={{ borderRadius: '5px' }}
                         key={page}
                         onClick={() => onPageChange(page)}
                         className={page === currentPage ? active : ''}
@@ -45,7 +51,12 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
                     </Link>
                 ))}
 
-                <Link to="#" onClick={handleNextPage} className={currentPage === totalPages - 1 ? disabled : ''}>
+                <Link
+                    to="#"
+                    style={{ borderRadius: '5px' }}
+                    onClick={handleNextPage}
+                    className={currentPage === totalPages - 1 ? disabled : ''}
+                >
                     &raquo;
                 </Link>
             </div>

@@ -11,30 +11,30 @@ library.add(faEdit, faTrashAlt, faSave, faTimes, faCheck);
 
 function DataTableWithActions({
     columns,
-    fetchDataApi, // Hàm để gọi API lấy dữ liệu phân trang
-    fetchRowDataApi, // Hàm để lấy dữ liệu chi tiết cho từng hàng
-    updateDataApi, // Hàm để cập nhật dữ liệu
-    deleteDataApi, // Hàm để xóa dữ liệu
-    primaryKey = 'id', // Thuộc tính khóa chính, mặc định là 'id'
-    customRowAction, // Hàm xử lý click trên từng hàng
+    fetchDataApi,
+    fetchRowDataApi,
+    updateDataApi,
+    deleteDataApi,
+    primaryKey = 'id',
+    customRowAction,
     labelEditInput,
     excludedKeys,
 }) {
-    const [data, setData] = useState([]); // Dữ liệu hiển thị trong bảng
-    const [selectRow, setSelectRow] = useState(null); // Dữ liệu dòng được chọn
-    const [totalRows, setTotalRows] = useState(0); // Tổng số bản ghi
-    const perPage = 4; // Số bản ghi mỗi trang
-    const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Trạng thái mở Modal sửa thông tin
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Trạng thái mở Modal xác nhận xóa
+    const [data, setData] = useState([]);
+    const [selectRow, setSelectRow] = useState(null);
+    const [totalRows, setTotalRows] = useState(0);
+    const perPage = 4;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     // Hàm lấy dữ liệu từ API
     const fetchData = async (page, size) => {
         try {
-            const result = await fetchDataApi(page - 1, size); // page - 1 để đúng với API trả về
-            setData(result.data); // Dữ liệu của trang hiện tại
-            setTotalRows(result.totalElements); // Tổng số bản ghi
-            setCurrentPage(result.currentPage + 1); // +1 vì số trang trong API bắt đầu từ 0
+            const result = await fetchDataApi(page - 1, size);
+            setData(result.data);
+            setTotalRows(result.totalElements);
+            setCurrentPage(result.currentPage + 1);
         } catch (error) {
             alert('Error fetching data: ', error);
         }
@@ -49,11 +49,6 @@ function DataTableWithActions({
         setCurrentPage(page);
     };
 
-    // const handlePerRowsChange = (newPerPage, page) => {
-    //     setPerPage(newPerPage);
-    //     fetchData(page, newPerPage);
-    // };
-
     const fetchRowData = async (row) => {
         try {
             const result = await fetchRowDataApi(row[primaryKey]);
@@ -64,21 +59,21 @@ function DataTableWithActions({
     };
 
     const handleEdit = (row) => {
-        fetchRowData(row); // Lấy dữ liệu chi tiết của hàng cần sửa
-        setIsEditModalOpen(true); // Mở Modal sửa
+        fetchRowData(row);
+        setIsEditModalOpen(true);
     };
 
     const handleDelete = (row) => {
-        fetchRowData(row); // Lấy dữ liệu chi tiết của hàng cần xóa
-        setIsDeleteModalOpen(true); // Mở Modal xác nhận xóa
+        fetchRowData(row);
+        setIsDeleteModalOpen(true);
     };
 
     const handleSave = async (updateData) => {
         try {
             await updateDataApi(updateData);
-            setIsEditModalOpen(false); // Đóng Modal sửa
+            setIsEditModalOpen(false);
             alert('Cập nhật thành công.');
-            fetchData(currentPage, perPage); // Lấy lại dữ liệu
+            fetchData(currentPage, perPage);
         } catch (error) {
             console.log(error.response.data);
             alert(`Đã có lỗi khi cập nhật : ${error.response.data.message}`);
@@ -88,9 +83,9 @@ function DataTableWithActions({
     const handleConfirmDelete = async () => {
         try {
             await deleteDataApi(selectRow[primaryKey]);
-            setIsDeleteModalOpen(false); // Đóng Modal xác nhận xóa
+            setIsDeleteModalOpen(false);
             alert('Xóa thành công.');
-            fetchData(currentPage, perPage); // Lấy lại dữ liệu sau khi xóa
+            fetchData(currentPage, perPage);
         } catch (error) {
             alert(`Đã có lỗi khi xóa: ${error.response.data.message}`);
         }
@@ -98,6 +93,7 @@ function DataTableWithActions({
 
     const buttonStyle = {
         letterSpacing: 'normal',
+        borderRadius: '5px',
         fontSize: '16px',
         width: '50px',
         textAlign: 'center',
@@ -110,7 +106,7 @@ function DataTableWithActions({
     const renderInputs = () => {
         return selectRow
             ? Object.keys(selectRow)
-                  .filter((key) => !excludedKeys.includes(key)) // Loại bỏ các khóa không muốn render
+                  .filter((key) => !excludedKeys.includes(key)) // Loại bỏ các key không muốn render
                   .map((key) => (
                       <div className="form-group" style={inputContainerStyle} key={key}>
                           <label style={labelStyle}>
@@ -131,60 +127,44 @@ function DataTableWithActions({
 
     const modalStyle = {
         content: {
-            maxWidth: '500px',
-            maxHeight: '200px', // Adjust the height to match the image more closely
-            margin: 'auto',
-            padding: '20px',
-            borderRadius: '8px',
+            position: 'relative',
+            borderRadius: '0.3rem',
             backgroundColor: '#fff',
-            border: 'none', // Remove border for a cleaner look
+            border: '1px solid #dee2e6',
+            boxShadow: '0 0.125rem 0.25rem rgba(0,0,0,.075)',
+            padding: '0',
+            maxWidth: '600px',
+            margin: 'auto',
         },
         overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Darken the overlay a bit more
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            right: '0',
+            bottom: '0',
+            backgroundColor: 'rgba(0,0,0,0.5)',
         },
-    };
-
-    const buttonContainerStyle = {
-        display: 'flex',
-        justifyContent: 'center',
-        gap: '20px', // Increase gap between buttons
-        marginTop: '20px', // Add space between buttons and text
     };
 
     const headerStyle = {
-        marginBottom: '20px',
-        textAlign: 'center',
-        color: '#333',
-        fontSize: '18px', // Adjust font size to be more prominent
-    };
-
-    const editModalStyle = {
-        content: {
-            maxWidth: '500px',
-            maxHeight: '400px',
-            margin: 'auto',
-            padding: '20px',
-            borderRadius: '8px',
-            backgroundColor: '#fff',
-            border: 'none',
-        },
-        overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        },
-    };
-
-    const editButtonContainerStyle = {
         display: 'flex',
-        justifyContent: 'center',
-        gap: '15px',
-        marginTop: '20px',
+        alignItems: 'center',
+        padding: '1rem',
+        borderBottom: '1px solid #dee2e6',
+        backgroundColor: '#f1f1f1',
+        textAlign: '16px',
     };
 
-    const editHeaderStyle = {
-        marginBottom: '20px',
-        textAlign: 'center',
-        color: '#333',
-        fontSize: '18px',
+    const bodyStyle = {
+        padding: '1rem',
+    };
+
+    const footerStyle = {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        padding: '1rem',
+        borderTop: '1px solid #dee2e6',
+        backgroundColor: '#f1f1f1',
     };
 
     const editButtonStyle = {
@@ -196,24 +176,26 @@ function DataTableWithActions({
 
     const inputContainerStyle = {
         display: 'flex',
-        alignItems: 'center', // Vertically align label and input
-        marginBottom: '15px', // Space between input rows
+        alignItems: 'center',
+        marginBottom: '15px',
     };
 
     const labelStyle = {
-        marginRight: '20px', // Add space between label and input
-        minWidth: '100px', // Optional: set a width to align multiple labels
-        textAlign: 'left', // Align text to the right to ensure it lines up with the input
+        marginRight: '20px',
+        minWidth: '100px',
+        textAlign: 'left',
         fontSize: '16px',
     };
 
     const inputStyle = {
-        flex: 1, // Make the input take the remaining space
+        flex: 1,
         padding: '5px',
         borderRadius: '4px',
         border: '1px solid #ccc',
         fontSize: '16px',
         textAlign: 'left',
+        display: 'block',
+        width: '450px',
     };
 
     return (
@@ -228,7 +210,7 @@ function DataTableWithActions({
                         : (row) => (
                               <div className="d-flex">
                                   <Button
-                                      style={buttonStyle}
+                                      style={{ ...buttonStyle, marginRight: '3px' }}
                                       className="mr-2"
                                       variant="primary"
                                       size="sm"
@@ -251,17 +233,12 @@ function DataTableWithActions({
                 customStyles={{
                     rows: {
                         style: {
-                            height: '70px', // Chiều cao của dòng
-                            lineHeight: '70px', // Đảm bảo văn bản nằm giữa dòng
+                            height: '70px',
+                            lineHeight: '70px',
                         },
                     },
                 }}
-                // pagination
-                // paginationServer
-                // paginationTotalRows={totalRows}
-                // onChangeRowsPerPage={handlePerRowsChange}
-                // onChangePage={handlePageChange}
-                onRowClicked={customRowAction} // Bắt sự kiện khi click vào dòng
+                onRowClicked={customRowAction}
             />
 
             {/* Modal sửa thông tin */}
@@ -270,15 +247,20 @@ function DataTableWithActions({
                 onRequestClose={() => setIsEditModalOpen(false)}
                 contentLabel="Modal sửa thông tin"
                 ariaHideApp={false}
-                style={editModalStyle}
+                style={modalStyle}
             >
-                <h2 style={editHeaderStyle}>Sửa thông tin</h2>
+                <h2 style={headerStyle}>Sửa thông tin</h2>
                 {selectRow && (
                     <div>
-                        {renderInputs()}
-                        <div style={editButtonContainerStyle}>
+                        <div style={bodyStyle}>{renderInputs()}</div>
+                        <div style={footerStyle}>
                             <Button
-                                style={{ ...editButtonStyle, backgroundColor: '#007bff', color: '#fff' }}
+                                style={{
+                                    ...editButtonStyle,
+                                    backgroundColor: '#007bff',
+                                    color: '#fff',
+                                    marginRight: '20px',
+                                }}
                                 variant="primary"
                                 size="sm"
                                 onClick={() => handleSave(selectRow)}
@@ -299,9 +281,9 @@ function DataTableWithActions({
             </Modal>
 
             <Pagination
-                currentPage={currentPage - 1} // Trang của Pagination là 0-based
-                totalPages={Math.ceil(totalRows / perPage)} // Tính tổng số trang
-                onPageChange={(page) => handlePageChange(page + 1)} // Pagination là 1-based, cần cộng 1
+                currentPage={currentPage - 1}
+                totalPages={Math.ceil(totalRows / perPage)}
+                onPageChange={(page) => handlePageChange(page + 1)}
             />
 
             {/* Modal xác nhận xóa */}
@@ -312,9 +294,15 @@ function DataTableWithActions({
                 ariaHideApp={false}
                 style={modalStyle}
             >
-                <h2 style={headerStyle}>Bạn có chắc chắn muốn xóa không?</h2>
-                <div style={buttonContainerStyle}>
-                    <Button style={buttonStyle} variant="danger" size="sm" onClick={handleConfirmDelete}>
+                <div style={headerStyle}>Xác nhận xóa</div>
+                <h2 style={bodyStyle}>Bạn có chắc chắn muốn xóa không?</h2>
+                <div style={footerStyle}>
+                    <Button
+                        style={{ ...buttonStyle, marginRight: '20px' }}
+                        variant="danger"
+                        size="sm"
+                        onClick={handleConfirmDelete}
+                    >
                         <FontAwesomeIcon icon="check" />
                     </Button>
                     <Button

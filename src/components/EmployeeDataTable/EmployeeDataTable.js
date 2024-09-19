@@ -14,7 +14,7 @@ function EmployeeDataTable() {
         updateAt: 'Ngày sửa',
     };
 
-    const excludedKeys = ['accountId', 'createAt', 'updateAt'];
+    const excludedKeys = ['accountId', 'createAt', 'updateAt', 'img'];
 
     const fetchDataApi = async (page, size) => {
         try {
