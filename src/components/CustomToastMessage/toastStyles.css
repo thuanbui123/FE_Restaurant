@@ -1,0 +1,9 @@
+.custom-toast {
+    min-width: 400px; /* Tùy chỉnh chiều rộng */
+    font-size: 16px; /* Tùy chỉnh kích thước chữ */
+    padding: 20px; /* Tùy chỉnh khoảng cách bên trong */
+}
+
+.custom-toast-body {
+    text-align: center;
+}

@@ -1,5 +1,6 @@
 import { request } from '~/utils/request';
 import DataTableWithActions from '~/components/DataTableWithActions';
+import CustomToastMessage from '../CustomToastMessage';
 
 function EmployeeDataTable() {
     const labelEditInput = {
@@ -28,7 +29,7 @@ function EmployeeDataTable() {
                 pageSize: data.pageable.pageSize,
             };
         } catch (error) {
-            console.log(error);
+            CustomToastMessage.error(error.response.data.message);
         }
     };
 
@@ -38,9 +39,8 @@ function EmployeeDataTable() {
     };
 
     const customRowAction = (rowData) => {
-        // Ví dụ: Hiển thị thông tin của hàng được chọn
         console.log('Thông tin nhân viên:', rowData);
-        alert(`Bạn đã chọn nhân viên: ${rowData.name}`);
+        CustomToastMessage.info(`Bạn đã chọn nhân viên: ${rowData.name}`);
     };
 
     const columns = [
@@ -75,12 +75,12 @@ function EmployeeDataTable() {
         {
             name: 'Địa chỉ',
             cell: (row) => row.address,
-            width: '130px',
+            width: '150px',
         },
         {
             name: 'Ngày tạo',
             cell: (row) => row.createAt,
-            width: '125px',
+            width: '130px',
         },
         {
             name: 'Hành động',

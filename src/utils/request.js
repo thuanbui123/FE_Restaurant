@@ -1,4 +1,5 @@
 import axios from 'axios';
+import CustomToastMessage from '~/components/CustomToastMessage';
 
 const httpRequest = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
@@ -11,9 +12,14 @@ httpRequest.interceptors.response.use(
     (error) => {
         if (error.response) {
             if (error.response.status === 401) {
-                alert('Lỗi 401: Unauthorized. Bạn cần đăng nhập lại.');
+                CustomToastMessage.error('Lỗi 401: Unauthorized. Bạn cần đăng nhập lại.', () => {
+                    localStorage.clear();
+                    window.location.href = '/auth';
+                });
             } else if (error.response.status === 403) {
-                alert('Lỗi 403: Forbidden. Bạn không có quyền truy cập.');
+                CustomToastMessage.error('Lỗi 403: Forbidden. Bạn không có quyền truy cập.', () => {});
+                localStorage.clear();
+                window.location.href = '/auth';
             }
         }
         return Promise.reject(error);

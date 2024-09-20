@@ -1,6 +1,6 @@
 import Home from '~/pages/Home';
 import Detail from '~/pages/Detail';
-import Admin from '~/pages/Admin';
+import AdminEmployee from '~/pages/AdminEmployee';
 import AdminLayout from '~/Layouts/AdminLayout';
 import Products from '~/pages/Product/Products';
 import React from 'react';
@@ -24,7 +24,7 @@ const publicRoutes = [
 //Khi khai báo route nên viết trước route có path '*'
 
 const privateRoutes = [
-    { path: '/admin', component: Admin, layout: AdminLayout },
+    { path: '/admin-employee', component: AdminEmployee, layout: AdminLayout },
     {
         path: '/products',
         component: Products,

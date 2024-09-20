@@ -4,6 +4,7 @@ import Register from '~/pages/Register';
 import Login from '~/pages/Login';
 import Overlay from './Overlay';
 import { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-bootstrap';
 
 const cx = classNames.bind(styles);
 
@@ -17,6 +18,11 @@ function LoginRegisterForm() {
             document.body.classList.remove(cx('login-register-active'));
         };
     }, []);
+
+    useEffect(() => {
+        // Update the document title when the panel changes
+        document.title = isRegisterActive ? 'Đăng ký' : 'Đăng nhập';
+    }, [isRegisterActive]);
 
     // Chuyển sang form đăng ký
     const handleRegisterClick = () => {
@@ -32,6 +38,7 @@ function LoginRegisterForm() {
             <Register />
             <Login />
             <Overlay onRegisterClick={handleRegisterClick} onLoginClick={handleLoginClick} />
+            <ToastContainer />
         </div>
     );
 }

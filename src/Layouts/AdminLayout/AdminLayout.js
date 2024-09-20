@@ -1,16 +1,31 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './AdminLayout.module.scss';
-import profileImage from './avatarDefault.jpg';
 
 const cx = classNames.bind(styles);
 
 function AdminLayout({ children }) {
     const [isSidebarClosed, setIsSidebarClosed] = useState(false);
     const [showSubmenuIndex, setShowSubmenuIndex] = useState(null);
+    const [username, setUsername] = useState('');
+    const [img, setImg] = useState('');
+    // const arrowRefs = useRef([]); // To track arrows
 
-    const arrowRefs = useRef([]); // To track arrows
+    function capitalizeFirstLetterOfEachWord(str) {
+        return str
+            .replace(/"/g, '')
+            .split(' ') // Tách chuỗi thành mảng các từ
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Viết hoa chữ cái đầu mỗi từ
+            .join(' '); // Ghép lại thành chuỗi
+    }
+
+    useEffect(() => {
+        const username = localStorage.getItem('user');
+        setUsername(capitalizeFirstLetterOfEachWord(username));
+        setImg(localStorage.getItem('img').replace(/"/g, ''));
+        console.log(localStorage.getItem('img').replace(/"/g, ''));
+    }, []);
 
     // Toggle sidebar open/close
     const toggleSidebar = () => {
@@ -23,7 +38,7 @@ function AdminLayout({ children }) {
     };
 
     return (
-        <>
+        <div className={cx('wrapper')}>
             <div className={cx('sidebar', { close: isSidebarClosed })}>
                 <div className={cx('logo-details')}>
                     <i className={cx('bx', 'bxl-react')}></i>
@@ -31,162 +46,173 @@ function AdminLayout({ children }) {
                 </div>
                 <ul className={cx('nav-links')}>
                     <li>
-                        <Link to="/admin">
+                        <Link to="/admin-employee">
                             <i className={cx('bx', 'bx-grid-alt')}></i>
-                            <span className={cx('link_name')}>Dashboard</span>
+                            <span className={cx('link_name')}>Thống kê</span>
                         </Link>
                         <ul className={cx('sub-menu', 'blank')}>
                             <li>
-                                <Link to="/admin" className={cx('link_name')}>
-                                    Category
+                                <Link to="/admin-employee" className={cx('link_name')}>
+                                    Thống kê
                                 </Link>
                             </li>
                         </ul>
                     </li>
                     <li className={cx(showSubmenuIndex === 0 ? 'showMenu' : '')}>
                         <div className={cx('icon-link')}>
-                            <Link to="/admin">
-                                <i className={cx('bx', 'bx-collection')}></i>
-                                <span className={cx('link_name')}>Category</span>
+                            <Link to="/admin-employee">
+                                <i className={cx('bx', 'bx-receipt')}></i>
+                                <span className={cx('link_name')}>Hóa đơn</span>
                             </Link>
                             <i className={cx('bx', 'bx-chevron-down', 'arrow')} onClick={() => toggleSubmenu(0)}></i>
                         </div>
                         <ul className={cx('sub-menu')}>
                             <li>
-                                <Link to="/admin" className={cx('link_name')}>
-                                    Category
+                                <Link to="/admin-employee" className={cx('link_name')}>
+                                    Hóa đơn
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/admin">HTML & CSS</Link>
+                                <Link to="/admin-employee">Đơn hiện thời</Link>
                             </li>
                             <li>
-                                <Link to="/admin">JavaScript</Link>
+                                <Link to="/admin-employee">Đơn nhập nguyên liệu</Link>
                             </li>
                             <li>
-                                <Link to="/admin">PHP & MySQL</Link>
+                                <Link to="/admin-employee">Lịch sử đơn hàng</Link>
                             </li>
                         </ul>
                     </li>
                     <li className={cx(showSubmenuIndex === 1 ? 'showMenu' : '')}>
                         <div className={cx('icon-link')}>
-                            <Link to="/admin">
-                                <i className={cx('bx', 'bx-book-bookmark')}></i>
-                                <span className={cx('link_name')}>Posts</span>
+                            <Link to="/admin-employee">
+                                <i className={cx('bx', 'bx-calendar-check')}></i>
+                                <span className={cx('link_name')}>Đặt bàn</span>
                             </Link>
-                            <i
-                                className={cx('bx', 'bx-chevron-down', 'arrow')}
-                                onClick={() => toggleSubmenu(1)} // Toggle submenu for index 1
-                                ref={(el) => (arrowRefs.current[1] = el)}
-                            ></i>
+                            <i className={cx('bx', 'bx-chevron-down', 'arrow')} onClick={() => toggleSubmenu(1)}></i>
                         </div>
                         <ul className={cx('sub-menu')}>
                             <li>
-                                <Link to="/admin" className={cx('link_name')}>
-                                    Posts
+                                <Link to="/admin-employee" className={cx('link_name')}>
+                                    Đặt bàn
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/admin">Web design</Link>
+                                <Link to="/admin-employee">Sơ đồ bàn</Link>
                             </li>
                             <li>
-                                <Link to="/admin">Card design</Link>
+                                <Link to="/admin-employee">Lịch đặt bàn</Link>
                             </li>
                             <li>
-                                <Link to="/admin">Login form</Link>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <Link to="/admin">
-                            <i className={cx('bx', 'bx-pie-chart-alt-2')}></i>
-                            <span className={cx('link_name')}>Analytics</span>
-                        </Link>
-                        <ul className={cx('sub-menu', 'blank')}>
-                            <li>
-                                <Link to="/admin" className={cx('link_name')}>
-                                    Analytics
-                                </Link>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <Link to="/admin">
-                            <i className={cx('bx', 'bx-line-chart')}></i>
-                            <span className={cx('link_name')}>Chart</span>
-                        </Link>
-                        <ul className={cx('sub-menu', 'blank')}>
-                            <li>
-                                <Link to="/admin" className={cx('link_name')}>
-                                    Chart
-                                </Link>
+                                <Link to="/admin-employee">Lịch sử đặt bàn</Link>
                             </li>
                         </ul>
                     </li>
                     <li className={cx(showSubmenuIndex === 2 ? 'showMenu' : '')}>
                         <div className={cx('icon-link')}>
-                            <Link to="/admin">
-                                <i className={cx('bx', 'bx-plug')}></i>
-                                <span className={cx('link_name')}>Plugins</span>
+                            <Link to="/admin-employee">
+                                <i className={cx('bx', 'bx-bowl-hot')}></i>
+                                <span className={cx('link_name')}>Mặt hàng</span>
                             </Link>
-                            <i
-                                className={cx('bx', 'bx-chevron-down', 'arrow')}
-                                onClick={() => toggleSubmenu(2)} // Toggle submenu for index 2
-                                ref={(el) => (arrowRefs.current[2] = el)}
-                            ></i>
+                            <i className={cx('bx', 'bx-chevron-down', 'arrow')} onClick={() => toggleSubmenu(2)}></i>
                         </div>
-                        <ul className={cx('sub-menu', { showMenu: showSubmenuIndex === 2 })}>
+                        <ul className={cx('sub-menu')}>
                             <li>
-                                <Link to="/admin" className={cx('link_name')}>
-                                    Plugins
+                                <Link to="/admin-employee" className={cx('link_name')}>
+                                    Mặt hàng
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/admin">UI Face</Link>
+                                <Link to="/admin-employee">Danh sách mặt hàng</Link>
                             </li>
                             <li>
-                                <Link to="/admin">Pigments</Link>
+                                <Link to="/admin-employee">Danh mục mặt hàng</Link>
+                            </li>
+                        </ul>
+                    </li>
+                    <li className={cx(showSubmenuIndex === 3 ? 'showMenu' : '')}>
+                        <div className={cx('icon-link')}>
+                            <Link to="/admin-employee">
+                                <i className={cx('bx', 'bx-baguette')}></i>
+                                <span className={cx('link_name')}>Nguyên liệu</span>
+                            </Link>
+                            <i className={cx('bx', 'bx-chevron-down', 'arrow')} onClick={() => toggleSubmenu(3)}></i>
+                        </div>
+                        <ul className={cx('sub-menu')}>
+                            <li>
+                                <Link to="/admin-employee" className={cx('link_name')}>
+                                    Nguyên liệu
+                                </Link>
                             </li>
                             <li>
-                                <Link to="/admin">Box Icons</Link>
+                                <Link to="/admin-employee">Danh sách nguyên liệu</Link>
+                            </li>
+                            <li>
+                                <Link to="/admin-employee">Danh mục nguyên liệu</Link>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <Link to="/admin">
-                            <i className={cx('bx', 'bx-compass')}></i>
-                            <span className={cx('link_name')}>Explore</span>
+                        <Link to="/admin-employee">
+                            <i className={cx('bx', 'bx-food-menu')}></i>
+                            <span className={cx('link_name')}>Thực đơn</span>
                         </Link>
                         <ul className={cx('sub-menu', 'blank')}>
                             <li>
-                                <Link to="/admin" className={cx('link_name')}>
-                                    Explore
+                                <Link to="/admin-employee" className={cx('link_name')}>
+                                    Thực đơn
                                 </Link>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <Link to="/admin">
-                            <i className={cx('bx', 'bx-history')}></i>
-                            <span className={cx('link_name')}>History</span>
+                        <Link to="/admin-employee">
+                            <i className={cx('bx', 'bx-copyright')}></i>
+                            <span className={cx('link_name')}>Combo</span>
                         </Link>
                         <ul className={cx('sub-menu', 'blank')}>
                             <li>
-                                <Link to="/admin" className={cx('link_name')}>
-                                    History
+                                <Link to="/admin-employee" className={cx('link_name')}>
+                                    Combo
                                 </Link>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <Link to="/admin">
-                            <i className={cx('bx', 'bx-cog')}></i>
-                            <span className={cx('link_name')}>Setting</span>
+                        <Link to="/admin-employee">
+                            <i className={cx('bx', 'bx-group')}></i>
+                            <span className={cx('link_name')}>Nhân viên</span>
                         </Link>
                         <ul className={cx('sub-menu', 'blank')}>
                             <li>
-                                <Link to="/admin" className={cx('link_name')}>
-                                    Setting
+                                <Link to="/admin-employee" className={cx('link_name')}>
+                                    Nhân viên
+                                </Link>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <Link to="/admin-employee">
+                            <i className={cx('bx', 'bx-id-card')}></i>
+                            <span className={cx('link_name')}>Khách hàng</span>
+                        </Link>
+                        <ul className={cx('sub-menu', 'blank')}>
+                            <li>
+                                <Link to="/admin-employee" className={cx('link_name')}>
+                                    Khách hàng
+                                </Link>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <Link to="/admin-employee">
+                            <i className={cx('bx', 'bx-store')}></i>
+                            <span className={cx('link_name')}>Nhà cung cấp</span>
+                        </Link>
+                        <ul className={cx('sub-menu', 'blank')}>
+                            <li>
+                                <Link to="/admin-employee" className={cx('link_name')}>
+                                    Nhà cung cấp
                                 </Link>
                             </li>
                         </ul>
@@ -194,10 +220,10 @@ function AdminLayout({ children }) {
                     <li>
                         <div className={cx('profile-details')}>
                             <div className={cx('profile-content')}>
-                                <img src={profileImage} alt="profile" />
+                                <img src={img} alt="profile" />
                             </div>
                             <div className={cx('name-job')}>
-                                <div className={cx('profile_name')}>Admin</div>
+                                <div className={cx('profile_name')}>{username}</div>
                             </div>
                             <i className={cx('bx', 'bx-log-out')}></i>
                         </div>
@@ -215,7 +241,7 @@ function AdminLayout({ children }) {
                     @Copyright <b>Groups 11 - Admin.</b> All Rights Reserved
                 </h2>
             </section>
-        </>
+        </div>
     );
 }
 

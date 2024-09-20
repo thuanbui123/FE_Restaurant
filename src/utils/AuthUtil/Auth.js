@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react';
+import CustomToastMessage from '~/components/CustomToastMessage';
 import { request } from '~/utils/request';
 
 const AuthContext = createContext(null);
@@ -13,7 +14,7 @@ export const AuthProvider = ({ children }) => {
             }
             return null;
         } catch (error) {
-            console.error('Error parsing user from localStorage:', error);
+            CustomToastMessage.error('Lỗi khi phân tích thông tin người dùng từ localStorage:', error);
             return null;
         }
     };
@@ -29,6 +30,7 @@ export const AuthProvider = ({ children }) => {
             let data = res.data;
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.username));
+            localStorage.setItem('img', JSON.stringify(data.img));
             setUser(data.username);
         } catch (error) {
             if (error.response) {
