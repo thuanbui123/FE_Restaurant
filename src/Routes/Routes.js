@@ -24,28 +24,34 @@ const publicRoutes = [
 //Khi khai báo route nên viết trước route có path '*'
 
 const privateRoutes = [
-    { path: '/admin-employee', component: AdminEmployee, layout: AdminLayout },
+    {
+        path: '/admin-employee',
+        component: AdminEmployee,
+        layout: AdminLayout,
+        allowedRoles: ['ROLE_EMPLOYEE_ADMIN', 'ROLE_EMPLOYEE'],
+    },
     {
         path: '/products',
         component: Products,
-        // requireAuth: true này thể hiện route đó cần phải đăng nhập trước rồi mới được phép truy cập
-        requireAuth: true,
         layout: AdminLayout,
-        // Children này thể hiện các route con. Ví dụ: route new-products là con của route products. Khi gọi đến route này là: http://localhost:3000/products/new-products
+        allowedRoles: ['ROLE_USER'],
         children: [
-            // Giao diện con mặc định không sử dụng lazyLoading được
-            // layout của route con nên để là null để nó ăn theo layout của route cha
-            { index: true, component: NewProducts, layout: null }, // Hiển thị UI con mặc định của Route cha
+            {
+                index: true,
+                component: NewProducts,
+                layout: null,
+                allowedRoles: ['ROLE_USER'],
+            },
             {
                 path: 'new-products',
                 component: LazyNewProduct,
                 wrapper: (Component) => (
-                    // Tạo cơ chế lazyLoading
                     <React.Suspense fallback={<Spinner />}>
                         <Component />
                     </React.Suspense>
                 ),
                 layout: null,
+                allowedRoles: ['ROLE_USER'],
             },
             {
                 path: 'featured-products',
@@ -56,6 +62,7 @@ const privateRoutes = [
                     </React.Suspense>
                 ),
                 layout: null,
+                allowedRoles: ['ROLE_USER'],
             },
         ],
     },

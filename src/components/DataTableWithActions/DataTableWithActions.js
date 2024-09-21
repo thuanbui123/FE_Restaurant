@@ -10,6 +10,7 @@ import { faEdit, faTrashAlt, faSave, faTimes, faCheck } from '@fortawesome/free-
 import CustomModal from '~/components/CustomModal';
 import { ToastContainer } from 'react-bootstrap';
 import CustomToastMessage from '~/components/CustomToastMessage';
+import Spinner from '~/components/Spinner';
 library.add(faEdit, faTrashAlt, faSave, faTimes, faCheck);
 
 function DataTableWithActions({
@@ -31,14 +32,18 @@ function DataTableWithActions({
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+    const [loading, setLoading] = useState(true);
+
     // Hàm lấy dữ liệu từ API
     const fetchData = useCallback(
         async (page, size) => {
             try {
+                setLoading(true);
                 const result = await fetchDataApi(page - 1, size);
                 setData(result.data);
                 setTotalRows(result.totalElements);
                 setCurrentPage(result.currentPage + 1);
+                setLoading(false);
             } catch (error) {
                 CustomToastMessage.error(error.response.data.message);
             }
@@ -100,7 +105,7 @@ function DataTableWithActions({
     useEffect(() => {
         const query = new URLSearchParams(location.search);
         const pageToLoad = query.get('page') ? parseInt(query.get('page'), 10) : 1;
-        const perPageToLoad = query.get('perPage') ? parseInt(query.get('perPage'), 10) : 10;
+        const perPageToLoad = query.get('perPage') ? parseInt(query.get('perPage'), 10) : perPage;
 
         // Gọi hàm fetchData với các giá trị từ URL
         fetchData(pageToLoad, perPageToLoad);
@@ -140,19 +145,17 @@ function DataTableWithActions({
     const renderInputs = () => {
         return selectRow
             ? Object.keys(selectRow)
-                  .filter((key) => !excludedKeys.includes(key)) // Loại bỏ các key không muốn render
+                  .filter((key) => !excludedKeys.includes(key))
                   .map((key) => (
                       <div className="form-group" style={inputContainerStyle} key={key}>
-                          <label style={labelStyle}>
-                              {labelEditInput[key] || key} {/* Fallback to key if label is not defined */}
-                          </label>
+                          <label style={labelStyle}>{labelEditInput[key] || key}</label>
                           <input
                               style={inputStyle}
                               name={key}
                               value={selectRow[key]}
                               onChange={(e) => setSelectRow({ ...selectRow, [key]: e.target.value })}
                               className="form-control"
-                              readOnly={key === primaryKey} // Khóa chính chỉ cho phép đọc
+                              readOnly={key === primaryKey}
                           />
                       </div>
                   ))
@@ -192,46 +195,50 @@ function DataTableWithActions({
 
     return (
         <>
-            <DataTable
-                columns={columns.map((col) => ({
-                    ...col,
-                    customStyles: col.customStyles,
-                    name: <span style={style}>{col.name}</span>,
-                    cell: col.cell
-                        ? (row) => <div style={style}>{col.cell(row)}</div>
-                        : (row) => (
-                              <div className="d-flex">
-                                  <Button
-                                      style={{ ...buttonStyle, marginRight: '3px' }}
-                                      className="mr-2"
-                                      variant="primary"
-                                      size="sm"
-                                      onClick={() => handleEdit(row)}
-                                  >
-                                      <FontAwesomeIcon icon="edit" />
-                                  </Button>
-                                  <Button
-                                      style={buttonStyle}
-                                      variant="danger"
-                                      size="sm"
-                                      onClick={() => handleDelete(row)}
-                                  >
-                                      <FontAwesomeIcon icon="trash-alt" />
-                                  </Button>
-                              </div>
-                          ),
-                }))}
-                data={data}
-                customStyles={{
-                    rows: {
-                        style: {
-                            height: '70px',
-                            lineHeight: '70px',
+            {loading ? (
+                <Spinner />
+            ) : (
+                <DataTable
+                    columns={columns.map((col) => ({
+                        ...col,
+                        customStyles: col.customStyles,
+                        name: <span style={style}>{col.name}</span>,
+                        cell: col.cell
+                            ? (row) => <div style={style}>{col.cell(row)}</div>
+                            : (row) => (
+                                  <div className="d-flex">
+                                      <Button
+                                          style={{ ...buttonStyle, marginRight: '3px' }}
+                                          className="mr-2"
+                                          variant="primary"
+                                          size="sm"
+                                          onClick={() => handleEdit(row)}
+                                      >
+                                          <FontAwesomeIcon icon="edit" />
+                                      </Button>
+                                      <Button
+                                          style={buttonStyle}
+                                          variant="danger"
+                                          size="sm"
+                                          onClick={() => handleDelete(row)}
+                                      >
+                                          <FontAwesomeIcon icon="trash-alt" />
+                                      </Button>
+                                  </div>
+                              ),
+                    }))}
+                    data={data}
+                    customStyles={{
+                        rows: {
+                            style: {
+                                height: '70px',
+                                lineHeight: '70px',
+                            },
                         },
-                    },
-                }}
-                onRowClicked={customRowAction}
-            />
+                    }}
+                    onRowClicked={customRowAction}
+                />
+            )}
 
             {/* Modal sửa thông tin */}
             <CustomModal

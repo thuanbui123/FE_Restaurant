@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '~/utils/AuthUtil/Auth';
 import classNames from 'classnames/bind';
 import styles from '~/pages/LoginAndRegister/styles.module.scss';
@@ -11,29 +11,41 @@ function Login() {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
-    const auth = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
-
-    const redirectPath = location.state?.path || '/';
+    const auth = useAuth();
 
     useEffect(() => {
-        if (auth.user) {
-            // Nếu người dùng đã đăng nhập, điều hướng tới trang home
-            navigate('/');
+        const userData = auth.user || JSON.parse(localStorage.getItem('user'));
+        console.log(userData);
+        if (userData) {
+            if (userData.role === 'ROLE_USER') {
+                navigate('/products');
+            } else if (userData.role === 'ROLE_EMPLOYEE_ADMIN' || userData.role === 'ROLE_EMPLOYEE') {
+                navigate('/admin-employee');
+            } else {
+                alert(`Unknown role: ${userData.role}`);
+            }
         }
     }, [auth.user, navigate]);
 
     const handleLoginSubmit = async (e) => {
         await e.preventDefault();
-        // Xóa các error trước đó
         setError('');
         const errorMessage = await auth.login(username, password);
 
         if (errorMessage) {
             setError(errorMessage);
         } else {
-            navigate(redirectPath);
+            const userData = JSON.parse(localStorage.getItem('user'));
+            if (userData) {
+                if (userData.role === 'ROLE_USER') {
+                    navigate('/products');
+                } else if (userData.role === 'ROLE_EMPLOYEE_ADMIN' || userData.role === 'ROLE_EMPLOYEE') {
+                    navigate('/admin-employee');
+                } else {
+                    alert(`Unknown role: ${userData.role}`);
+                }
+            }
         }
     };
 

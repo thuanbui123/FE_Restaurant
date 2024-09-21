@@ -2,29 +2,35 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './AdminLayout.module.scss';
+import { useAuth } from '~/utils/AuthUtil/Auth';
 
 const cx = classNames.bind(styles);
 
 function AdminLayout({ children }) {
+    const auth = useAuth();
     const [isSidebarClosed, setIsSidebarClosed] = useState(false);
     const [showSubmenuIndex, setShowSubmenuIndex] = useState(null);
     const [username, setUsername] = useState('');
     const [img, setImg] = useState('');
     // const arrowRefs = useRef([]); // To track arrows
 
-    function capitalizeFirstLetterOfEachWord(str) {
-        return str
-            .replace(/"/g, '')
-            .split(' ') // Tách chuỗi thành mảng các từ
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Viết hoa chữ cái đầu mỗi từ
-            .join(' '); // Ghép lại thành chuỗi
-    }
+    // function capitalizeFirstLetterOfEachWord(str) {
+    //     if (!str) {
+    //         return null;
+    //     }
+    //     return str
+    //         .replace(/"/g, '')
+    //         .split(' ') // Tách chuỗi thành mảng các từ
+    //         .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Viết hoa chữ cái đầu mỗi từ
+    //         .join(' '); // Ghép lại thành chuỗi
+    // }
 
     useEffect(() => {
-        const username = localStorage.getItem('user');
-        setUsername(capitalizeFirstLetterOfEachWord(username));
-        setImg(localStorage.getItem('img').replace(/"/g, ''));
-        console.log(localStorage.getItem('img').replace(/"/g, ''));
+        const user = JSON.parse(localStorage.getItem('user'));
+        const username = user.username;
+        setUsername(username);
+        const img = user.img;
+        setImg(img);
     }, []);
 
     // Toggle sidebar open/close
@@ -35,6 +41,10 @@ function AdminLayout({ children }) {
     // Handle submenu toggling by index
     const toggleSubmenu = (index) => {
         setShowSubmenuIndex((prevIndex) => (prevIndex === index ? null : index));
+    };
+
+    const logout = () => {
+        auth.logout();
     };
 
     return (
@@ -225,7 +235,7 @@ function AdminLayout({ children }) {
                             <div className={cx('name-job')}>
                                 <div className={cx('profile_name')}>{username}</div>
                             </div>
-                            <i className={cx('bx', 'bx-log-out')}></i>
+                            <i className={cx('bx', 'bx-log-out')} onClick={logout}></i>
                         </div>
                     </li>
                 </ul>

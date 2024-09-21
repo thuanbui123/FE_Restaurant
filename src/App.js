@@ -4,6 +4,7 @@ import { DefaultLayout } from '~/Layouts/DefaultLayout';
 import { Fragment } from 'react';
 import { AuthProvider } from '~/utils/AuthUtil/Auth';
 import { RequireAuth } from '~/utils/AuthUtil/RequireAuth';
+import RoleBasedRoute from '~/utils/AuthUtil/RoleBasedRoute';
 
 function App() {
     const renderRoute = (route, index) => {
@@ -20,7 +21,7 @@ function App() {
 
         const routeElement = route.requireAuth ? (
             <RequireAuth>
-                <Layout>{element}</Layout>
+                <RoleBasedRoute component={element} allowedRoles={route.allowedRoles} />
             </RequireAuth>
         ) : (
             <Layout>{element}</Layout>

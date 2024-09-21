@@ -9,8 +9,8 @@ export const AuthProvider = ({ children }) => {
         try {
             const user = localStorage.getItem('user');
             // Kiểm tra nếu user không phải là chuỗi JSON hợp lệ
-            if (user && user !== 'undefined') {
-                return user;
+            if (user) {
+                return JSON.parse(user);
             }
             return null;
         } catch (error) {
@@ -29,9 +29,19 @@ export const AuthProvider = ({ children }) => {
             const res = await request('post', '/auth/authenticate', postData);
             let data = res.data;
             localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.username));
-            localStorage.setItem('img', JSON.stringify(data.img));
-            setUser(data.username);
+            localStorage.setItem(
+                'user',
+                JSON.stringify({
+                    username: data.username,
+                    img: data.img,
+                    role: data.role,
+                }),
+            );
+            setUser({
+                username: data.username,
+                img: data.img,
+                role: data.role,
+            });
         } catch (error) {
             if (error.response) {
                 const backendMessage = error.response.data.message || 'An error occurred. Please try again.';
@@ -52,8 +62,19 @@ export const AuthProvider = ({ children }) => {
             const res = await request('post', '/auth/register', postData);
             let data = res.data;
             localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.username));
-            setUser(data.username);
+            localStorage.setItem(
+                'user',
+                JSON.stringify({
+                    username: data.username,
+                    img: data.img,
+                    role: data.role,
+                }),
+            );
+            setUser({
+                username: data.username,
+                img: data.img,
+                role: data.role,
+            });
         } catch (error) {
             if (error.response) {
                 const backendMessage = error.response.data.message || 'An error occurred. Please try again.';
@@ -68,6 +89,8 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         localStorage.removeItem('user');
         localStorage.removeItem('token');
+        localStorage.removeItem('img');
+        window.location.reload();
     };
 
     return <AuthContext.Provider value={{ user, login, register, logout }}>{children}</AuthContext.Provider>;
