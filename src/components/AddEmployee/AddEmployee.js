@@ -96,7 +96,8 @@ function AddEmployee() {
                 window.location.reload(); // Reload trang sau khi toast đóng
             });
         } catch (error) {
-            CustomToastMessage.error(error.response.data.message);
+            console.log(error.response.data);
+            CustomToastMessage.error(error.response.data);
         }
     };
 
@@ -104,7 +105,7 @@ function AddEmployee() {
         <div className={cx('wrapper')}>
             <div className={cx('header')}>
                 <Button
-                    style={{ ...buttonStyle, marginRight: '3px' }}
+                    style={{ ...buttonStyle, marginRight: '50px' }}
                     variant="primary"
                     size="sm"
                     onClick={() => setIsOpen(true)}

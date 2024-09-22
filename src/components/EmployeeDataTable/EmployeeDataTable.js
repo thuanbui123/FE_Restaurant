@@ -1,8 +1,11 @@
 import { request } from '~/utils/request';
 import DataTableWithActions from '~/components/DataTableWithActions';
 import CustomToastMessage from '../CustomToastMessage';
+import { useEffect, useState } from 'react';
 
-function EmployeeDataTable() {
+function EmployeeDataTable({ searchData }) {
+    const [tableData, setTableData] = useState(null);
+
     const labelEditInput = {
         code: 'Mã nhân viên',
         name: 'Họ tên',
@@ -110,6 +113,17 @@ function EmployeeDataTable() {
         }
     };
 
+    useEffect(() => {
+        if (searchData) {
+            setTableData({
+                data: searchData.data,
+                totalElements: searchData.totalElements,
+                currentPage: searchData.pageNumber,
+                pageSize: searchData.pageSize,
+            });
+        }
+    }, [searchData]);
+
     return (
         <DataTableWithActions
             columns={columns}
@@ -121,6 +135,7 @@ function EmployeeDataTable() {
             primaryKey="code"
             labelEditInput={labelEditInput}
             excludedKeys={excludedKeys}
+            searchData={tableData}
         />
     );
 }

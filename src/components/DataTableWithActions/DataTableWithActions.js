@@ -23,6 +23,7 @@ function DataTableWithActions({
     customRowAction,
     labelEditInput,
     excludedKeys,
+    searchData,
 }) {
     const [data, setData] = useState([]);
     const [selectRow, setSelectRow] = useState(null);
@@ -40,21 +41,37 @@ function DataTableWithActions({
             try {
                 setLoading(true);
                 const result = await fetchDataApi(page - 1, size);
-                setData(result.data);
-                setTotalRows(result.totalElements);
-                setCurrentPage(result.currentPage + 1);
-                setLoading(false);
+                if (result) {
+                    setData(result.data || []); // Đặt giá trị mặc định là mảng rỗng
+                    setTotalRows(result.totalElements || 0);
+                    setCurrentPage(result.currentPage + 1);
+                }
             } catch (error) {
                 CustomToastMessage.error(error.response.data.message);
+            } finally {
+                setLoading(false);
             }
         },
         [fetchDataApi],
     );
 
+    // useEffect(() => {
+    //     fetchData(currentPage, perPage);
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [currentPage]);
+
     useEffect(() => {
-        fetchData(currentPage, perPage);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentPage]);
+        console.log(searchData);
+        if (searchData) {
+            if (searchData.data) {
+                setData(searchData.data);
+                setCurrentPage(searchData.currentPage + 1);
+                setTotalRows(searchData.totalElements || 0);
+            }
+        } else {
+            fetchData(currentPage, perPage);
+        }
+    }, [currentPage, fetchData, searchData]);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -109,7 +126,8 @@ function DataTableWithActions({
 
         // Gọi hàm fetchData với các giá trị từ URL
         fetchData(pageToLoad, perPageToLoad);
-    }, [fetchData, location.search]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.search]);
 
     const handleConfirmDelete = async () => {
         try {

@@ -16,7 +16,6 @@ function Login() {
 
     useEffect(() => {
         const userData = auth.user || JSON.parse(localStorage.getItem('user'));
-        console.log(userData);
         if (userData) {
             if (userData.role === 'ROLE_USER') {
                 navigate('/products');
