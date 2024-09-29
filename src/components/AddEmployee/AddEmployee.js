@@ -33,10 +33,10 @@ function AddEmployee() {
 
     const callAccountApi = async () => {
         try {
-            const response = await request('get', `/account/get-accounts`);
+            const response = await request('get', `/account/get-account-employee`);
             setAccounts(response.data);
         } catch (error) {
-            CustomToastMessage.error(error.response.data.message);
+            CustomToastMessage.error(error?.response?.data?.message);
         }
     };
 
@@ -96,8 +96,7 @@ function AddEmployee() {
                 window.location.reload(); // Reload trang sau khi toast đóng
             });
         } catch (error) {
-            console.log(error.response.data);
-            CustomToastMessage.error(error.response.data);
+            CustomToastMessage.error(error?.response?.data?.message);
         }
     };
 

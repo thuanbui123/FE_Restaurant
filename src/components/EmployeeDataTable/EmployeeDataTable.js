@@ -32,7 +32,7 @@ function EmployeeDataTable({ searchData }) {
                 pageSize: data.pageable.pageSize,
             };
         } catch (error) {
-            CustomToastMessage.error(error.response.data.message);
+            CustomToastMessage.error(error?.response?.data?.message);
         }
     };
 

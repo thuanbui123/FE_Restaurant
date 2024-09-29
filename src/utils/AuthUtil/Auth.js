@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem(
                 'user',
                 JSON.stringify({
+                    id: data.id,
                     username: data.username,
                     img: data.img,
                     role: data.role,
@@ -65,6 +66,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem(
                 'user',
                 JSON.stringify({
+                    id: data.id,
                     username: data.username,
                     img: data.img,
                     role: data.role,

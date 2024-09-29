@@ -47,7 +47,7 @@ function DataTableWithActions({
                     setCurrentPage(result.currentPage + 1);
                 }
             } catch (error) {
-                CustomToastMessage.error(error.response.data.message);
+                CustomToastMessage.error(error?.response?.data?.message);
             } finally {
                 setLoading(false);
             }
@@ -61,7 +61,6 @@ function DataTableWithActions({
     // }, [currentPage]);
 
     useEffect(() => {
-        console.log(searchData);
         if (searchData) {
             if (searchData.data) {
                 setData(searchData.data);
@@ -82,7 +81,7 @@ function DataTableWithActions({
             const result = await fetchRowDataApi(row[primaryKey]);
             setSelectRow(result);
         } catch (error) {
-            CustomToastMessage.error(error.response.data.message);
+            CustomToastMessage.error(error?.response?.data?.message);
         }
     };
 
@@ -115,7 +114,7 @@ function DataTableWithActions({
                 window.location.reload();
             });
         } catch (error) {
-            CustomToastMessage.error(error.response.data.message);
+            CustomToastMessage.error(error?.response?.data?.message);
         }
     };
 
@@ -144,7 +143,7 @@ function DataTableWithActions({
                 window.location.reload();
             });
         } catch (error) {
-            CustomToastMessage.error(error.response.data.message);
+            CustomToastMessage.error(error?.response?.data?.message);
         }
     };
 
