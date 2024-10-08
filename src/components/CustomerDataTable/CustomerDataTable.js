@@ -3,11 +3,11 @@ import DataTableWithActions from '~/components/DataTableWithActions';
 import CustomToastMessage from '../CustomToastMessage';
 import { useEffect, useState } from 'react';
 
-function EmployeeDataTable({ searchData }) {
+function CustomerDataTable({ searchData }) {
     const [tableData, setTableData] = useState(null);
 
     const labelEditInput = {
-        code: 'Mã nhân viên',
+        code: 'Mã khách hàng',
         name: 'Họ tên',
         email: 'Email',
         phoneNumber: 'Số điện thoại',
@@ -22,8 +22,8 @@ function EmployeeDataTable({ searchData }) {
 
     const fetchDataApi = async (page, size) => {
         try {
-            const response = await request('get', `/employees/find-all?page=${page}&size=${size}`);
-            const data = response.data;
+            const response = await request('get', `/customers/find-all?page=${page}&size=${size}`);
+            const data = await response.data;
             return {
                 data: data.content,
                 totalPage: data.totalPage,
@@ -37,20 +37,20 @@ function EmployeeDataTable({ searchData }) {
     };
 
     const fetchRowDataApi = async (value) => {
-        const response = await request('GET', '/employees/find-one-by-code?query=' + value);
+        const response = await request('GET', '/customers/find-one-by-code?query=' + value);
         return response.data;
     };
 
     const customRowAction = (rowData) => {
-        console.log('Thông tin nhân viên:', rowData);
-        CustomToastMessage.info(`Bạn đã chọn nhân viên: ${rowData.name}`);
+        console.log('Thông tin khách hàng:', rowData);
+        CustomToastMessage.info(`Bạn đã chọn khách hàng: ${rowData.name}`);
     };
 
     const columns = [
         {
-            name: 'Mã nhân viên',
+            name: 'Mã khách hàng',
             cell: (row) => row.code,
-            width: '100px',
+            width: '110px',
         },
         {
             name: 'Hình ảnh',
@@ -90,12 +90,12 @@ function EmployeeDataTable({ searchData }) {
         },
     ];
 
-    const updateDataApi = async (employee) => {
+    const updateDataApi = async (customer) => {
         try {
             const response = await request(
                 'PUT',
-                `http://localhost:8080/api-restaurant/employees/update/${employee.code}`,
-                employee,
+                `http://localhost:8080/api-restaurant/customers/update/${customer.code}`,
+                customer,
             );
             return response.data;
         } catch (error) {
@@ -105,7 +105,7 @@ function EmployeeDataTable({ searchData }) {
 
     const deleteDataApi = async (value) => {
         try {
-            const response = await request('delete', `http://localhost:8080/api-restaurant/employees/delete/${value}`);
+            const response = await request('delete', `http://localhost:8080/api-restaurant/customers/delete/${value}`);
             return response.data;
         } catch (error) {
             throw error;
@@ -139,4 +139,4 @@ function EmployeeDataTable({ searchData }) {
     );
 }
 
-export default EmployeeDataTable;
+export default CustomerDataTable;

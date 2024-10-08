@@ -1,0 +1,63 @@
+.card {
+    width: 180px; /* Keep the card width */
+    height: 200px; /* Keep the card height */
+    border: 1px solid #eee;
+    border-radius: 12px;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    background-color: white;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for clean effect */
+    display: flex;
+    flex-direction: column; /* Set the layout vertically */
+    justify-content: space-between; /* Distribute the content evenly */
+  }
+  
+  .table-number {
+    font-size: 28px;
+    color: #fff;
+    background-color: #ffcc00;
+    border-radius: 10px;
+    width: 130px; /* Wider table number */
+    height: 50px; /* Same height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto; /* Remove margin, let flex control the spacing */
+  }
+  
+  .table-status {
+    color: #5a5a5a;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #5a5a5a;
+    height: 50px; /* Set a height equal to table number */
+  }
+
+  .table-number, .table-status, .checkmark {
+    user-select: none; /* Disable text selection */
+    pointer-events: none; /* Disable click events like drag or copy */
+  }
+  
+  .selected {
+    border: 2px solid #0066ff;
+  }
+  
+  .checkmark {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #0066ff;
+    color: white;
+    font-size: 18px;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  

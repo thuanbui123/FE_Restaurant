@@ -16,7 +16,7 @@ function Register() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const redirectPath = location.state?.path || '/';
+    const redirectPath = location.state?.path || '/update-info';
 
     const handleRegisterSubmit = async (e) => {
         e.preventDefault();

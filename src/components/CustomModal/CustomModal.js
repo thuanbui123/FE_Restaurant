@@ -10,7 +10,9 @@ function CustomModal(props) {
             boxShadow: '0 0.125rem 0.25rem rgba(0,0,0,.075)',
             padding: '0',
             maxWidth: '600px',
-            margin: 'auto',
+            margin: '0 auto',
+            maxHeight: '500px',
+            overflowY: 'auto',
         },
         overlay: {
             position: 'fixed',
