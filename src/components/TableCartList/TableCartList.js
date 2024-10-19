@@ -7,28 +7,25 @@ import CustomToastMessage from '~/components/CustomToastMessage';
 
 const cx = classNames.bind(style);
 
-function TableCartList() {
+function TableCartList({ urlApi }) {
     useEffect(() => {
         document.title = 'Sơ đồ bàn';
     }, []);
 
     const [tables, setTables] = useState(null);
-
     const [locations, setLocations] = useState(null);
-
     const [selectedLocation, setSelectedLocation] = useState('Tầng 1');
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchDataApi = async () => {
         try {
-            const response = await request('get', `/tables/get-tables-by-location?query=${selectedLocation}`);
+            // Sử dụng urlApi nếu có, nếu không thì dùng URL mặc định
+            const response = await request('get', urlApi || `/tables/get-tables-by-location?query=${selectedLocation}`);
             return response.data;
         } catch (error) {
             CustomToastMessage.error(error?.response?.data?.message);
         }
     };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchLocationApi = async () => {
         try {
             const response = await request('get', `/tables/locations`);
@@ -47,8 +44,7 @@ function TableCartList() {
         };
 
         fetchData();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [urlApi]);
 
     useEffect(() => {
         const fetchLocation = async () => {
@@ -61,15 +57,17 @@ function TableCartList() {
     }, []);
 
     useEffect(() => {
-        const fetchTableByLocation = async () => {
-            const result = await fetchDataApi();
-            if (result) {
-                setTables(result);
-            }
-        };
-        fetchTableByLocation();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedLocation]);
+        if (!urlApi) {
+            // Chỉ lấy danh sách bàn theo vị trí nếu không có urlApi
+            const fetchTableByLocation = async () => {
+                const result = await fetchDataApi();
+                if (result) {
+                    setTables(result);
+                }
+            };
+            fetchTableByLocation();
+        }
+    }, [selectedLocation, urlApi]);
 
     return (
         <div className={cx('container')}>

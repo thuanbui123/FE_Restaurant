@@ -17,6 +17,11 @@ import FoodDetail from '~/FoodDetail';
 import ComboList from '~/components/ComboList';
 import TableCartList from '~/components/TableCartList';
 import OrderPage from '~/pages/OrderPage';
+import BillOrderPage from '~/pages/BillOrderPage';
+import BillPage from '~/pages/BillPage';
+import TableBookingPage from '~/pages/TableBookingPage';
+import TableSelection from '~/pages/TableSelectionPage';
+import AdminIngredients from '~/pages/AdminIngredients';
 
 // Nạp các component cần thực hiện lazyLoading
 // const LazyNewProduct = React.lazy(() => import('~/pages/NewProducts'));
@@ -25,7 +30,7 @@ import OrderPage from '~/pages/OrderPage';
 
 // Public routes
 const publicRoutes = [
-    { path: '/', component: Home },
+    { path: '/', component: Home, layout: AdminLayout },
     // { path: '/detail', component: Detail },
     { path: '/auth', component: LoginRegisterForm, layout: null },
 ];
@@ -33,6 +38,42 @@ const publicRoutes = [
 //Khi khai báo route nên viết trước route có path '*'
 
 const privateRoutes = [
+    {
+        path: 'admin-ingredients',
+        component: AdminIngredients,
+        layout: AdminLayout,
+        allowedRoles: ['ROLE_USER'],
+    },
+    {
+        path: 'table-selection/:id',
+        component: TableSelection,
+        layout: AdminLayout,
+        allowedRoles: ['ROLE_USER'],
+    },
+    {
+        path: '/booking-table',
+        component: TableBookingPage,
+        layout: AdminLayout,
+        allowedRoles: ['ROLE_USER'],
+    },
+    {
+        path: '/bill',
+        component: BillPage,
+        layout: null,
+        allowedRoles: ['ROLE_USER'],
+    },
+    {
+        path: '/bill-order-now',
+        component: BillOrderPage,
+        layout: AdminLayout,
+        allowedRoles: ['ROLE_USER'],
+    },
+    {
+        path: '/bill-order-detail/:id',
+        component: OrderPage,
+        layout: AdminLayout,
+        allowedRoles: ['ROLE_USER'],
+    },
     {
         path: '/order/:id',
         component: OrderPage,

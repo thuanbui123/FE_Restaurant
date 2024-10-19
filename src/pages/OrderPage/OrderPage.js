@@ -5,14 +5,14 @@ import { useEffect, useState } from 'react';
 import { request } from '~/utils/request';
 import CustomToastMessage from '~/components/CustomToastMessage';
 import CartItem from '~/components/CartItem/CartItem';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 const cx = classNames.bind(style);
 
 function OrderPage() {
     const { id } = useParams();
-
+    const navigate = useNavigate();
     const [foodOrdered, setFoodOrdered] = useState([]);
     const [comboOrdered, setComboOrdered] = useState([]);
 
@@ -40,8 +40,51 @@ function OrderPage() {
         }
     };
 
-    const handleQuantityChange = (newQuantity) => {
-        console.log('New quantity:', newQuantity);
+    const handleQuantityChange = async (item) => {
+        if (item.type === 'food') {
+            const requestData = {
+                orderedId: id,
+                detailRequests: [
+                    {
+                        foodId: item.id,
+                        quantity: item.quantity,
+                    },
+                ],
+            };
+            try {
+                await request('put', `/food-order/update`, requestData);
+                CustomToastMessage.success('Cập nhật số lượng của món ăn thành công');
+            } catch (error) {
+                let errorMessage = 'Có lỗi xảy ra, vui lòng thử lại.';
+
+                if (error.response && error.response.data) {
+                    errorMessage = error.response.data;
+                }
+
+                CustomToastMessage.error(errorMessage);
+            }
+        } else if (item.type === 'combo') {
+            const requestData = {
+                ordered: id,
+                requests: [
+                    {
+                        comboId: item.id,
+                        quantity: item.quantity,
+                    },
+                ],
+            };
+            try {
+                await request('put', `/combo-ordered/update`, requestData);
+                CustomToastMessage.success('Cập nhật số lượng của combo món ăn thành công');
+            } catch (error) {
+                let errorMessage = 'Có lỗi xảy ra, vui lòng thử lại.';
+                if (error.response && error.response.data) {
+                    errorMessage = error.response.data; // Lấy thông báo lỗi từ server
+                }
+
+                CustomToastMessage.error(errorMessage);
+            }
+        }
     };
 
     const handleRemoveItem = async (item) => {
@@ -163,6 +206,37 @@ function OrderPage() {
         }
     };
 
+    const handleBackButtonClick = () => {
+        navigate(-1); // Điều hướng về trang trước đó
+    };
+
+    const handleBtnClick = async () => {
+        try {
+            const bill = await request('post', `/employee-order/order-payment?order-id=${id}`);
+            const billData = bill.data;
+            const simpleBillData = {
+                dateOrder: billData.dateOrder,
+                datePayment: billData.datePayment,
+                location: billData.location,
+                tableCode: billData.tableCode,
+                customerName: billData.customerName,
+                foodOrdered: billData.foodOrdered, // Nếu bạn cần hiển thị chi tiết món ăn
+                comboOrdered: billData.comboOrdered, // Thêm comboOrdered vào dữ liệu
+                totalPrice: billData.totalPrice,
+            };
+            CustomToastMessage.success('Thanh toán thành công', () => {
+                navigate('/bill', { state: { billData: simpleBillData } });
+            });
+        } catch (error) {
+            let errorMessage = 'Có lỗi xảy ra, vui lòng thử lại.';
+            if (error.response && error.response.data) {
+                errorMessage = error.response.data; // Lấy thông báo lỗi từ server
+            }
+
+            CustomToastMessage.error(errorMessage);
+        }
+    };
+
     return (
         <div className={cx('wrapper')}>
             <ToastContainer />
@@ -208,15 +282,11 @@ function OrderPage() {
                         : ''}
                 </div>
                 <div className={cx('right-footer')}>
-                    <button className={cx('custom-btn', 'btn', 'btn-danger')}>
+                    <button onClick={handleBackButtonClick} className={cx('custom-btn', 'btn', 'btn-danger')}>
                         <i className={cx('bx', 'bxs-x-circle')}></i>
                         <p>Quay lại</p>
                     </button>
-                    <button className={cx('custom-btn', 'btn', 'btn-primary')}>
-                        <i className={cx('bx', 'bxs-down-arrow-circle')}></i>
-                        <p>Lưu lại</p>
-                    </button>
-                    <button className={cx('custom-btn', 'btn', 'btn-success')}>
+                    <button onClick={handleBtnClick} className={cx('custom-btn', 'btn', 'btn-success')}>
                         <i className={cx('bx', 'bx-money-withdraw')}></i>
                         <p>Thanh toán</p>
                     </button>

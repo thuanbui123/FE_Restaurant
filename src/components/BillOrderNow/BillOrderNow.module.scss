@@ -1,0 +1,126 @@
+.table-order-menu {
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  max-width: 400px;
+  background-color: #fff;
+  position: relative;
+  margin: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Tạo chiều sâu */
+  font-family: Arial, sans-serif; /* Phông chữ tổng thể */
+}
+
+.table-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-details {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #333; /* Màu chữ tối hơn để dễ đọc */
+}
+
+.table-details span {
+  margin-bottom: 4px;
+}
+
+.table-people {
+  font-weight: bold;
+  font-size: 18px; /* Nhấn mạnh số người */
+  color: #007bff; /* Màu xanh để làm nổi bật */
+}
+
+.order-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.order-time, .order-total {
+  font-size: 14px;
+  color: #555; /* Màu sắc dịu hơn */
+  margin-bottom: 8px;
+}
+
+.menu-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-button, .payment-button {
+  width: 100px; /* Chiều rộng bằng nhau */
+  height: 50px; /* Chiều cao bằng nhau */
+  border-radius: 0; /* Không có border radius */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px; /* Cỡ chữ đồng nhất */
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Cấu hình cho menu button */
+.menu-button {
+  background-color: #f8f8f8; /* Nền màu xám nhẹ */
+  border: 1px solid #ccc; /* Đường viền nhạt */
+  color: #000;
+}
+
+.menu-button:hover {
+  background-color: #eaeaea; /* Hiệu ứng hover */
+}
+
+/* Cấu hình cho payment button */
+.payment-button {
+  background-color: #007bff; /* Màu nền xanh cho payment button */
+  color: #fff;
+  border: none;
+  letter-spacing: 0;
+  width: 150px;
+  padding: 12px 20px;
+}
+
+.payment-button:hover {
+  background-color: #0056b3;
+  letter-spacing: 0;
+  transform: translateY(-2px); /* Hiệu ứng hover nổi lên */
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 130px;
+  left: 57px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  z-index: 1;
+}
+
+.dropdown-menu ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu li {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f0f0f0;
+}
+
+.menu-icon {
+  margin-right: 8px;
+}

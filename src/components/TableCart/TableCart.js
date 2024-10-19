@@ -5,7 +5,7 @@ import style from './TableCart.module.scss';
 const cx = classNames.bind(style);
 
 function TableCart({ table }) {
-    const isSelect = table.status === 'Đang phục vụ';
+    const isSelect = table.status === 'Đang phục vụ' || table.status === 'Khách nhận bàn';
     return (
         <div className={cx('card', ` ${isSelect ? 'selected' : ''}`)}>
             <div className={cx('table-number')}>{table.code}</div>

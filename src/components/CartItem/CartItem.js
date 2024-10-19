@@ -6,16 +6,18 @@ const cx = classNames.bind(style);
 
 function CartItem({ id, name, price, quantity, onQuantityChange, onRemove, type }) {
     const [itemQuantity, setItemQuantity] = useState(quantity);
-    const handleDecrease = () => {
+    const handleDecrease = (type) => {
         if (itemQuantity > 1) {
-            setItemQuantity(itemQuantity - 1);
-            onQuantityChange(itemQuantity - 1);
+            const newQuantity = itemQuantity - 1;
+            setItemQuantity(newQuantity);
+            onQuantityChange({ id, quantity: newQuantity, type });
         }
     };
 
-    const handleIncrease = () => {
-        setItemQuantity(itemQuantity + 1);
-        onQuantityChange(itemQuantity + 1);
+    const handleIncrease = (type) => {
+        const newQuantity = itemQuantity + 1;
+        setItemQuantity(newQuantity);
+        onQuantityChange({ id, quantity: newQuantity, type });
     };
 
     const handleRemove = (type) => {
@@ -30,9 +32,9 @@ function CartItem({ id, name, price, quantity, onQuantityChange, onRemove, type 
                 <p>{price.toLocaleString('vi-VN')} đ</p>
             </div>
             <div className={cx('cart-item-quantity')}>
-                <button onClick={handleDecrease}>-</button>
+                <button onClick={() => handleDecrease(type)}>-</button>
                 <input type="text" value={itemQuantity} readOnly />
-                <button onClick={handleIncrease}>+</button>
+                <button onClick={() => handleIncrease(type)}>+</button>
             </div>
             <div className={cx('cart-item-total')}>
                 <p>{(price * itemQuantity).toLocaleString('vi-VN')} đ</p>

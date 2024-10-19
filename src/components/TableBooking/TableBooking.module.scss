@@ -1,0 +1,116 @@
+.app-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.booking-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    position: relative; 
+}
+
+.booking-header {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+.booking-details {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    margin: 15px 0;
+}
+
+.booking-icon {
+    flex-shrink: 0;
+}
+
+.booking-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.booking-info div {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.booking-info div svg {
+    margin-right: 5px;
+}
+
+.booking-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.booking-footer button {
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px;
+    letter-spacing: 0;
+}
+
+.booking-footer button:hover {
+    letter-spacing: 0;
+}
+
+.booking-footer .option-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #000;
+    font-size: 20px;
+    margin-right: 10px;
+    position: relative;
+}
+
+.option-button:hover {
+    color: #333;
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+    position: absolute;
+    top: 207px; /* Adjust this based on the height */
+    left: 0px; /* Position to the left */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none; /* Initially hidden */
+    z-index: 100;
+}
+
+.dropdown-menu.show {
+    display: block; /* Show when clicked */
+}
+
+.dropdown-item {
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #333;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}

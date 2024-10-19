@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  height: 100vh; /* Full height */
+}
+
+.location-list {
+  width: 200px; /* Adjust width for the location list */
+  padding: 20px;
+  border-right: 1px solid #ccc; /* Border separating the locations and tables */
+  overflow-y: auto; /* Scrollable for large lists */
+}
+
+.location-item {
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 10px;
+  background-color: #fff; /* White background for each location */
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: background-color 0.3s;
+  font-size: 2rem;
+}
+
+.location-item.active {
+  background-color: #007bff; /* Blue color for the active location */
+  color: #fff; /* White text for active location */
+}
+
+.table-cart-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 20px; 
+  padding: 20px;
+}
+
+.table-item {
+  cursor: pointer;
+}
+
+  

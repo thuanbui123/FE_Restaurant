@@ -3,27 +3,26 @@ import DataTableWithActions from '~/components/DataTableWithActions';
 import CustomToastMessage from '../CustomToastMessage';
 import { useEffect, useState } from 'react';
 
-function CustomerDataTable({ searchData }) {
+function IngredientDataTable({ searchData }) {
     const [tableData, setTableData] = useState(null);
 
     const labelEditInput = {
-        code: 'Mã khách hàng',
-        name: 'Họ tên',
-        email: 'Email',
-        phoneNumber: 'Số điện thoại',
+        code: 'Mã nguyên liệu',
+        name: 'Tên nguyên liệu',
         address: 'Địa chỉ',
         img: 'Ảnh',
-        accountId: 'Mã tài khoản',
-        createAt: 'Ngày tạo',
-        updateAt: 'Ngày sửa',
+        quantity: 'Số lượng',
+        type: 'Loại nguyên liệu',
+        unit: 'Đơn vị',
+        supplierId: 'Nhà cung cấp',
     };
 
-    const excludedKeys = ['accountId', 'createAt', 'updateAt', 'img'];
+    const excludedKeys = ['supplierName', 'slug', 'createAt', 'updateAt', 'img'];
 
     const fetchDataApi = async (page, size) => {
         try {
-            const response = await request('get', `/customers/get-list?page=${page}&size=${size}`);
-            const data = await response.data;
+            const response = await request('get', `/ingredients/find-all?page=${page}&size=${size}`);
+            const data = response.data.body;
             return {
                 data: data.content,
                 totalPage: data.totalPage,
@@ -37,20 +36,20 @@ function CustomerDataTable({ searchData }) {
     };
 
     const fetchRowDataApi = async (value) => {
-        const response = await request('GET', '/customers/find-one-by-code?query=' + value);
+        const response = await request('GET', `/ingredients/find-one-by-code?query=${value}`);
         return response.data;
     };
 
     const customRowAction = (rowData) => {
-        console.log('Thông tin khách hàng:', rowData);
-        CustomToastMessage.info(`Bạn đã chọn khách hàng: ${rowData.name}`);
+        console.log('Thông tin nguyên liệu:', rowData);
+        CustomToastMessage.info(`Bạn đã chọn nguyên liệu: ${rowData.name}`);
     };
 
     const columns = [
         {
-            name: 'Mã khách hàng',
+            name: 'Mã nguyên liệu',
             cell: (row) => row.code,
-            width: '110px',
+            width: '100px',
         },
         {
             name: 'Hình ảnh',
@@ -60,24 +59,24 @@ function CustomerDataTable({ searchData }) {
             width: '70px',
         },
         {
-            name: 'Họ tên',
+            name: 'Tên nguyên liệu',
             cell: (row) => row.name,
             width: '150px',
             // sortable: true,
         },
         {
-            name: 'Số điện thoại',
-            cell: (row) => row.phoneNumber,
+            name: 'Loại',
+            cell: (row) => row.type,
             width: '150px',
         },
         {
-            name: 'Email',
-            cell: (row) => row.email,
-            width: '250px',
+            name: 'Số lượng',
+            cell: (row) => row.quantity + row.unit,
+            width: '150px',
         },
         {
-            name: 'Địa chỉ',
-            cell: (row) => row.address,
+            name: 'Nhà cung cấp',
+            cell: (row) => row.supplierName,
             width: '150px',
         },
         {
@@ -90,12 +89,12 @@ function CustomerDataTable({ searchData }) {
         },
     ];
 
-    const updateDataApi = async (customer) => {
+    const updateDataApi = async (value) => {
         try {
             const response = await request(
                 'PUT',
-                `http://localhost:8080/api-restaurant/customers/update/${customer.code}`,
-                customer,
+                `http://localhost:8080/api-restaurant/ingredients/update/${value.code}`,
+                value,
             );
             return response.data;
         } catch (error) {
@@ -105,7 +104,10 @@ function CustomerDataTable({ searchData }) {
 
     const deleteDataApi = async (value) => {
         try {
-            const response = await request('delete', `http://localhost:8080/api-restaurant/customers/delete/${value}`);
+            const response = await request(
+                'delete',
+                `http://localhost:8080/api-restaurant/ingredients/delete/${value}`,
+            );
             return response.data;
         } catch (error) {
             throw error;
@@ -139,4 +141,4 @@ function CustomerDataTable({ searchData }) {
     );
 }
 
-export default CustomerDataTable;
+export default IngredientDataTable;

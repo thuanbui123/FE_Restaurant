@@ -3,19 +3,14 @@ import DataTableWithActions from '~/components/DataTableWithActions';
 import CustomToastMessage from '../CustomToastMessage';
 import { useEffect, useState } from 'react';
 
-function CustomerDataTable({ searchData }) {
+function ImportInvoice({ searchData }) {
     const [tableData, setTableData] = useState(null);
 
     const labelEditInput = {
-        code: 'Mã khách hàng',
+        code: 'Mã đơn nhập',
         name: 'Họ tên',
-        email: 'Email',
-        phoneNumber: 'Số điện thoại',
-        address: 'Địa chỉ',
-        img: 'Ảnh',
-        accountId: 'Mã tài khoản',
-        createAt: 'Ngày tạo',
-        updateAt: 'Ngày sửa',
+        entryDate: 'Ngày nhập',
+        employeeName: 'Nhân viên',
     };
 
     const excludedKeys = ['accountId', 'createAt', 'updateAt', 'img'];
@@ -48,7 +43,7 @@ function CustomerDataTable({ searchData }) {
 
     const columns = [
         {
-            name: 'Mã khách hàng',
+            name: 'Mã đơn',
             cell: (row) => row.code,
             width: '110px',
         },
@@ -139,4 +134,4 @@ function CustomerDataTable({ searchData }) {
     );
 }
 
-export default CustomerDataTable;
+export default ImportInvoice;

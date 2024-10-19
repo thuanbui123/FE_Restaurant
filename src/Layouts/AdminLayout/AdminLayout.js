@@ -52,7 +52,7 @@ function AdminLayout({ children }) {
             <div className={cx('sidebar', { close: isSidebarClosed })}>
                 <div className={cx('logo-details')}>
                     <i className={cx('bx', 'bxl-react')}></i>
-                    <span className={cx('logo-name')}>Groups 11</span>
+                    <span className={cx('logo-name')}>Nhóm 11</span>
                 </div>
                 <ul className={cx('nav-links')}>
                     <li>
@@ -70,7 +70,7 @@ function AdminLayout({ children }) {
                     </li>
                     <li className={cx(showSubmenuIndex === 0 ? 'showMenu' : '')}>
                         <div className={cx('icon-link')}>
-                            <Link to="/admin-employee">
+                            <Link to="/bill-order-now">
                                 <i className={cx('bx', 'bx-receipt')}></i>
                                 <span className={cx('link_name')}>Hóa đơn</span>
                             </Link>
@@ -78,12 +78,12 @@ function AdminLayout({ children }) {
                         </div>
                         <ul className={cx('sub-menu')}>
                             <li>
-                                <Link to="/admin-employee" className={cx('link_name')}>
+                                <Link to="/bill-order-now" className={cx('link_name')}>
                                     Hóa đơn
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/admin-employee">Đơn hiện thời</Link>
+                                <Link to="/bill-order-now">Đơn hiện thời</Link>
                             </li>
                             <li>
                                 <Link to="/admin-employee">Đơn nhập nguyên liệu</Link>
@@ -111,7 +111,7 @@ function AdminLayout({ children }) {
                                 <Link to="/tables">Sơ đồ bàn</Link>
                             </li>
                             <li>
-                                <Link to="/admin-employee">Lịch đặt bàn</Link>
+                                <Link to="/booking-table">Lịch đặt bàn</Link>
                             </li>
                             <li>
                                 <Link to="/admin-employee">Lịch sử đặt bàn</Link>
@@ -142,7 +142,7 @@ function AdminLayout({ children }) {
                     </li>
                     <li className={cx(showSubmenuIndex === 3 ? 'showMenu' : '')}>
                         <div className={cx('icon-link')}>
-                            <Link to="/admin-employee">
+                            <Link to="/admin-ingredients">
                                 <i className={cx('bx', 'bx-baguette')}></i>
                                 <span className={cx('link_name')}>Nguyên liệu</span>
                             </Link>
@@ -150,12 +150,12 @@ function AdminLayout({ children }) {
                         </div>
                         <ul className={cx('sub-menu')}>
                             <li>
-                                <Link to="/admin-employee" className={cx('link_name')}>
+                                <Link to="/admin-ingredients" className={cx('link_name')}>
                                     Nguyên liệu
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/admin-employee">Danh sách nguyên liệu</Link>
+                                <Link to="/admin-ingredients">Danh sách nguyên liệu</Link>
                             </li>
                             <li>
                                 <Link to="/admin-employee">Danh mục nguyên liệu</Link>
