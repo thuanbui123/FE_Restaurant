@@ -24,10 +24,6 @@ function BillOrderPage() {
         fetchData();
     }, []);
 
-    if (data.length === 0) {
-        return <p>No orders available</p>;
-    }
-
     return (
         <div className="wrapper">
             <div className="header">
@@ -36,9 +32,11 @@ function BillOrderPage() {
                 </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-                {data.map((order) => (
-                    <BillOrderNow key={order.orderId} data={order} />
-                ))}
+                {data ? (
+                    data.map((order) => <BillOrderNow key={order.orderId} data={order} />)
+                ) : (
+                    <p>No orders available</p>
+                )}
             </div>
 
             <ToastContainer />
